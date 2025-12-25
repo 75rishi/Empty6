@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Message for You</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #f2f2f2;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* LOCK SCREEN */
+    .lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: lockFadeIn 1.8s ease;
+    }
+    @keyframes lockFadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes lockFadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+    .note-text {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 1.1rem;
+      color: #ffcc00;
+      max-width: 90%;
+      padding: 15px;
+      background: rgba(30, 30, 30, 0.7);
+      border-radius: 12px;
+      border: 2px solid #ff6600;
+      box-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+      z-index: 1001;
+    }
+
+    .lock-title {
+      font-size: 2.8rem;
+      color: #00ffcc;
+      margin-bottom: 40px;
+      text-shadow: 0 0 20px #11ff00, 0 0 40px #00ffcc;
+      animation: glowPulse 2s infinite alternate;
+    }
+    @keyframes glowPulse {
+      from { text-shadow: 0 0 15px #ff00d0; }
+      to { text-shadow: 0 0 35px #fe1ed5, 0 0 60px #00ffcc; }
+    }
+
+    .password-input {
+      padding: 18px;
+      font-size: 1.8rem;
+      width: 340px;
+      text-align: center;
+      border: 4px solid #ff3700;
+      border-radius: 15px;
+      background: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+      transition: all 0.4s ease;
+    }
+    .password-input:focus {
+      outline: none;
+      border-color: #ff00ff;
+      box-shadow: 0 0 40px rgba(255, 0, 255, 0.8);
+      transform: scale(1.06);
+    }
+
+    .unlock-btn {
+      margin-top: 35px;
+      padding: 16px 45px;
+      font-size: 1.5rem;
+      background: linear-gradient(90deg, #00f2fe, #fe4f95);
+      border: none;
+      border-radius: 15px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 25px #00f2fe;
+      transition: all 0.5s ease;
+    }
+    .unlock-btn:hover {
+      background: linear-gradient(90deg, #fc466b, #3f5efb);
+      box-shadow: 0 0 45px #ff00f2, 0 0 55px #3f5efb;
+      transform: scale(1.18) rotate(1deg);
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .request-box {
+      background: linear-gradient(145deg, #1a1a1a, #2b2b2b);
+      border: 3px solid #ffd000;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 23, 255, 0.6);
+      width: 90%;
+      max-width: 800px;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .line {
+      margin-bottom: 12px;
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 1s ease;
+    }
+    .page.active {
+      display: block;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      width: 100%;
+    }
+
+    .nav-btn {
+      background-color: #000;
+      color: #fff;
+      border: 4px solid #8400ff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+      box-shadow: 0 0 15px #00ffcc;
+    }
+    .nav-btn:hover {
+      background-color: #00ff0d;
+      color: #000;
+      transform: scale(1.08);
+    }
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .language-toggle {
+      margin-top: 20px;
+      padding: 14px 30px;
+      font-size: 1.4rem;
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff00ff;
+      transition: 0.4s;
+    }
+    .language-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .summary-toggle {
+      margin-top: 20px;
+      padding: 14px 30px;
+      font-size: 1.4rem;
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00f2fe;
+      transition: 0.4s;
+    }
+    .summary-toggle:hover {
+      background: linear-gradient(90deg, #fc466b, #3f5efb);
+      transform: scale(1.1);
+    }
+
+    .summary-box {
+      width: 90%;
+      max-width: 900px;
+      padding: 30px;
+      margin-top: 30px;
+      background: linear-gradient(135deg, #1e1e1e, #292929);
+      border: 3px solid;
+      border-image: linear-gradient(45deg, #00ffcc, #ff00ff, #00ffff) 1;
+      border-radius: 15px;
+      color: #fff;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      box-shadow: 0 0 30px #00ffcc;
+      display: none;
+      animation: doorOpen 0.6s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes doorOpen {
+      0% { transform: scaleX(0); opacity: 0; }
+      100% { transform: scaleX(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOCK SCREEN -->
+  <div id="lockScreen" class="lock-screen">
+    <div class="note-text">
+      Dear likhna to ham hi the but ise format mein maine AI se karwaya hai<br>
+      to kahin kahin word koi change kar diya ya us word ka meaning change ho gaya hai<br>
+      to aap samajh lena plz... time nahi tha nahi to main khud kar deta
+    </div>
+    <div class="lock-title">Enter Password</div>
+    <input type="password" id="passwordInput" class="password-input" placeholder="Password..." autocomplete="off">
+    <button class="unlock-btn" onclick="checkPassword()">Unlock</button>
+    <p style="margin-top: 25px; color: #ff4d4d; font-size: 1.1rem; display: none;" id="errorMsg">Wrong Password! Try again.</p>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="mainContent" class="main-content">
+
+    <!-- Buttons at Top -->
+    <button class="language-toggle" onclick="toggleLanguage()">Switch to Hinglish Version</button>
+    <button class="summary-toggle" onclick="toggleSummary()">Summary & Next Step</button>
+
+    <!-- English Version (Default First) -->
+    <div class="request-box" id="englishContent">
+      <div id="e_page1" class="page active">
+        <div class="line"><span style="color:#ff0066;">Dear Buddy,</span></div>
+        <div class="line">First of all, <span style="color:#00ffcc;">dear</span> —</div>
+        <div class="line">whether I’m <span style="color:#ffcc00;">online 😎</span> or <span style="color:#66ff66;">offline 🙂</span>,</div>
+        <div class="line">with <span style="color:#ff66ff;">friends 😁</span> or <span style="color:#00ffff;">alone 😎😇😏🧐</span>,</div>
+        <div class="line"><span style="color:#ff3300;">please don’t complain.</span> 😌</div>
+        <div class="line">start</div>
+        <div class="line">I'm much more <span style="color:#ffff33;">mature</span> and much <span style="color:#ccff33;">smarter</span> now.</div>
+        <div class="line">I don’t really need anyone’s <span style="color:#ff99cc;">help</span> — I usually handle everything on my own.</div>
+        <div class="line">But yes, I often use <span style="color:#00ff99;">AI</span> to know what to do, how to do it, and why to do it.</div>
+        <div class="line">Now that I’m able to do things myself, I wonder —</div>
+        <div class="line">why do I still come to you with <span style="color:#ff6600;">questions</span>?</div>
+        <div class="line"><span style="color:#3399ff;">Maybe because I trust you.</span></div>
+        <div class="line">That’s why I just wanted to say <span style="color:#ff3366;">thank you</span>.</div>
+        <div class="line">I also wanted to ask a few questions about <span style="color:#cc33ff;">“illegal” and “legal”</span> things.</div>
+        <div class="line">Before that, I want to make one thing clear —</div>
+        <div class="line">I <span style="color:#ff99ff;">never lie</span>. Please understand that.</div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevEngPage()" disabled>Back</button>
+          <button class="nav-btn" onclick="nextEngPage()">Next</button>
+        </div>
+      </div>
+
+      <div id="e_page2" class="page">
+        <div class="line">I’ve already told you something <span style="color:#00ccff;">personal</span> before —</div>
+        <div class="line">whenever I share my <span style="color:#ff0000;">ideas</span> with a friend,</div>
+        <div class="line">their luck seems to go <span style="color:#66ff33;">down</span> from that day.</div>
+        <div class="line">But ever since I started talking to you,</div>
+        <div class="line">everything in my life has only <span style="color:#ffcc99;">gotten better</span>.</div>
+        <div class="line">I first saw you on <span style="color:#33ffcc;">2nd August 2025</span>,</div>
+        <div class="line">and from that day onwards,</div>
+        <div class="line">I began studying in the library until <span style="color:#ffff99;">7 PM</span> every day —</div>
+        <div class="line">because at that time, I felt a <span style="color:#ff66cc;">strong motivation</span> from you.</div>
+        <div class="line">If you had <span style="color:#99ff33;">refused</span> to help me back then,</div>
+        <div class="line">I would never have asked you again —</div>
+        <div class="line">that’s just how I am.</div>
+        <div class="line">I thought you would say no,</div>
+        <div class="line">but you <span style="color:#00ff00;">didn’t</span>.</div>
+        <div class="line">(Sorry if my thoughts jump from one topic to another —</div>
+        <div class="line">my mind is always full of <span style="color:#ff9933;">ideas</span>.)</div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevEngPage()">Back</button>
+          <button class="nav-btn" onclick="nextEngPage()">Next</button>
+        </div>
+      </div>
+
+      <div id="e_page3" class="page">
+        <div class="line">Just like my sister is the <span style="color:#ff33ff;">Lakshmi</span> of our house,</div>
+        <div class="line">you are the same for your home.</div>
+        <div class="line">(Okay, I’ll stop being <span style="color:#33ccff;">too emotional</span> here. 😅)</div>
+        <div class="line">Now, here’s what I actually want to say —</div>
+        <div class="line">In <span style="color:#00ffff;">2026</span>, I’m going to work hard on my goals.</div>
+        <div class="line">Even if I <span style="color:#ff3366;">fail</span>, it’s okay.</div>
+        <div class="line">Since the day I met you,</div>
+        <div class="line">things have only gone <span style="color:#ccff00;">right</span> in my life —</div>
+        <div class="line">and I wanted you to <span style="color:#66ffff;">know</span> that.</div>
+        <div class="line">I <span style="color:#ff9900;">trust</span> you,</div>
+        <div class="line">so please <span style="color:#9900ff;">don’t share this</span> with anyone.</div>
+        <div class="line">This will be my <span style="color:#ff0099;">last personal message</span> for now —</div>
+        <div class="line"><span style="color:#00ff33;">don’t worry</span>, I won’t disturb you in 2026.</div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevEngPage()">Back</button>
+          <button class="nav-btn" onclick="nextEngPage()">Next</button>
+        </div>
+      </div>
+
+      <div id="e_page4" class="page">
+        <div class="line">I just have one question:</div>
+        <div class="line"><span style="color:#ff00ff;">Why is it that ever since I met you,</span></div>
+        <div class="line"><span style="color:#ff0000; font-size:1.4rem;">everything in my life has started improving —</span></div>
+        <div class="line"><span style="color:#ff0000; font-size:1.4rem;">especially when I face problems or tough situations ?</span></div>
+        <div class="line"><span style="color:#26ff00; font-size:1.3rem;">Thank you :-</span></div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevEngPage()">Back</button>
+          <button class="nav-btn" onclick="nextEngPage()" disabled>Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hinglish Version (Hidden initially) -->
+    <div class="request-box" id="hinglishContent" style="display:none;">
+      <div id="h_page1" class="page active">
+        <div class="line"><span style="color:#ff0066;">Dear Buddy,</span></div>
+        <div class="line">First of all, <span style="color:#00ffcc;">dear</span> —</div>
+        <div class="line">whether I’m <span style="color:#ffcc00;">online 😎</span> or <span style="color:#66ff66;">offline 🙂</span>,</div>
+        <div class="line">with <span style="color:#ff66ff;">friends 😁</span> or <span style="color:#00ffff;">alone 😎😇😏🧐</span>,</div>
+        <div class="line"><span style="color:#ff3300;">please don’t complain.</span> 😌</div>
+        <div class="line">start</div>
+        <div class="line">I'm much more <span style="color:#ffff33;">mature</span> and much <span style="color:#ccff33;">smarter</span> now.</div>
+        <div class="line">I don’t really need anyone’s help — I usually handle everything on my own.</div>
+        <div class="line">But yes, I often use <span style="color:#00ff99;">AI</span> to know what to do, how to do it, and why to do it.</div>
+        <div class="line">Now that I’m able to do things myself, I wonder —</div>
+        <div class="line">why do I still come to you with questions?</div>
+        <div class="line"><span style="color:#ff99cc;">Maybe because I trust you.</span></div>
+        <div class="line">That’s why I just wanted to say <span style="color:#3399ff;">thank you</span>.</div>
+        <div class="line">I also wanted to ask a few questions about <span style="color:#ff3366;">“illegal” and “legal”</span> things.</div>
+        <div class="line">Before that, I want to make one thing clear —</div>
+        <div class="line">I <span style="color:#cc33ff;">never lie</span>. Please understand that.</div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevPage()" disabled>Back</button>
+          <button class="nav-btn" onclick="nextPage()">Next</button>
+        </div>
+      </div>
+
+      <div id="h_page2" class="page">
+        <div class="line">I’ve already told you something <span style="color:#ff99ff;">personal</span> before —</div>
+        <div class="line">whenever I share my <span style="color:#00ccff;">ideas</span> with a friend,</div>
+        <div class="line">their luck seems to go <span style="color:#ff0000;">down</span> from that day.</div>
+        <div class="line">But ever since I started talking to you,</div>
+        <div class="line">everything in my life has only <span style="color:#66ff33;">gotten better</span>.</div>
+        <div class="line">I first saw you on <span style="color:#ffcc99;">2nd August 2025</span>,</div>
+        <div class="line">and from that day onwards,</div>
+        <div class="line">I began studying in the library until <span style="color:#33ffcc;">7 PM</span> every day —</div>
+        <div class="line">because at that time, I felt a <span style="color:#ffff99;">strong motivation</span> from you.</div>
+        <div class="line">If you had refused to help me back then,</div>
+        <div class="line">I would never have asked you again —</div>
+        <div class="line">that’s just how I am.</div>
+        <div class="line">I thought you would say no,</div>
+        <div class="line">but you <span style="color:#00ff00;">didn’t</span>.</div>
+        <div class="line">(Sorry if my thoughts jump from one topic to another —</div>
+        <div class="line">my mind is always full of ideas.)</div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevPage()">Back</button>
+          <button class="nav-btn" onclick="nextPage()">Next</button>
+        </div>
+      </div>
+
+      <div id="h_page3" class="page">
+        <div class="line">Just like my sister is the <span style="color:#ff33ff;">Lakshmi</span> of our house,</div>
+        <div class="line">you are the same for your home.</div>
+        <div class="line">(Okay, I’ll stop being <span style="color:#ffcc66;">too emotional</span> here. 😅)</div>
+        <div class="line">Now, here’s what I actually want to say —</div>
+        <div class="line">In <span style="color:#ff3366;">2026</span>, I’m going to work hard on my goals.</div>
+        <div class="line">Even if I <span style="color:#ccff00;">fail</span>, it’s okay.</div>
+        <div class="line">Since the day I met you,</div>
+        <div class="line">things have only gone <span style="color:#66ffff;">right</span> in my life —</div>
+        <div class="line">and I wanted you to <span style="color:#ff9900;">know</span> that.</div>
+        <div class="line">I <span style="color:#9900ff;">trust</span> you,</div>
+        <div class="line">so please <span style="color:#ff0099;">don’t share this</span> with anyone.</div>
+        <div class="line">This will be my <span style="color:#00ff33;">last personal message</span> for now —</div>
+        <div class="line"><span style="color:#ffff00;">don’t worry</span>, I won’t disturb you in 2026.</div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevPage()">Back</button>
+          <button class="nav-btn" onclick="nextPage()">Next</button>
+        </div>
+      </div>
+
+      <div id="h_page4" class="page">
+        <div class="line">I just have one question:</div>
+        <div class="line"><span style="color:#ff00ff;">Why is it that ever since I met you,</span></div>
+        <div class="line"><span style="color:#ff0000; font-size:1.4rem;">everything in my life has started improving —</span></div>
+        <div class="line"><span style="color:#ff0000; font-size:1.4rem;">especially when I face problems or tough situations ?</span></div>
+        <div class="line"><span style="color:#26ff00; font-size:1.3rem;">Thank you :-</span></div>
+
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="prevPage()">Back</button>
+          <button class="nav-btn" onclick="nextPage()" disabled>Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="summaryBox" class="summary-box">
+      <div class="line"><span style="color:#ff0066;">Dear Buddy,</span></div>
+      <div class="line"><span style="color:#00ffcc;">Thank you so much</span> — ever since I met you, everything in my life has started improving dramatically, especially in tough situations.</div>
+      <div class="line">My studies, focus, and luck — all going great because of the motivation from you.</div>
+      <div class="line">I trust you completely and shared my 2026 plans.</div>
+      <div class="line">This is my last personal message — won’t disturb in 2026.</div>
+      <div class="line">Question: <span style="color:#ff0000; font-size:1.4rem;">Why has life improved so much since meeting you?</span></div>
+      <div class="line" style="margin-top: 30px; font-size: 1.5rem; text-align: center;">
+        <a href="https://7577e.github.io/workkk/" target="_blank" style="color: #00ffcc; text-decoration: underline;">
+          Click here for the next step / my work
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const validPasswords = ['7', '28', '45', '27'];
+
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+      if (validPasswords.includes(input)) {
+        document.getElementById('lockScreen').style.animation = 'lockFadeOut 1.2s ease forwards';
+        setTimeout(() => {
+          document.getElementById('lockScreen').style.display = 'none';
+          document.getElementById('mainContent').style.display = 'flex';
+        }, 1200);
+      } else {
+        errorMsg.style.display = 'block';
+        setTimeout(() => { errorMsg.style.display = 'none'; }, 2500);
+      }
+    }
+
+    document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+
+    // English Pagination
+    let currentEngPage = 1;
+    const totalEngPages = 4;
+
+    function showEngPage(pageNum) {
+      for (let i = 1; i <= totalEngPages; i++) {
+        document.getElementById(`e_page${i}`).classList.remove('active');
+      }
+      document.getElementById(`e_page${pageNum}`).classList.add('active');
+      document.querySelector('#englishContent .nav-btn[onclick="prevEngPage()"]').disabled = pageNum === 1;
+      document.querySelector('#englishContent .nav-btn[onclick="nextEngPage()"]').disabled = pageNum === totalEngPages;
+    }
+
+    function nextEngPage() {
+      if (currentEngPage < totalEngPages) {
+        currentEngPage++;
+        showEngPage(currentEngPage);
+      }
+    }
+
+    function prevEngPage() {
+      if (currentEngPage > 1) {
+        currentEngPage--;
+        showEngPage(currentEngPage);
+      }
+    }
+
+    // Hinglish Pagination
+    let currentHPage = 1;
+    const totalHPages = 4;
+
+    function showHPage(pageNum) {
+      for (let i = 1; i <= totalHPages; i++) {
+        document.getElementById(`h_page${i}`).classList.remove('active');
+      }
+      document.getElementById(`h_page${pageNum}`).classList.add('active');
+      document.querySelector('#hinglishContent .nav-btn[onclick="prevPage()"]').disabled = pageNum === 1;
+      document.querySelector('#hinglishContent .nav-btn[onclick="nextPage()"]').disabled = pageNum === totalHPages;
+    }
+
+    function nextPage() {
+      if (currentHPage < totalHPages) {
+        currentHPage++;
+        showHPage(currentHPage);
+      }
+    }
+
+    function prevPage() {
+      if (currentHPage > 1) {
+        currentHPage--;
+        showHPage(currentHPage);
+      }
+    }
+
+    // Language Toggle
+    let isEnglish = true;
+    function toggleLanguage() {
+      if (isEnglish) {
+        document.getElementById('englishContent').style.display = 'none';
+        document.getElementById('hinglishContent').style.display = 'block';
+        document.querySelector('.language-toggle').textContent = 'Switch to English Version';
+        showHPage(currentHPage);
+        isEnglish = false;
+      } else {
+        document.getElementById('hinglishContent').style.display = 'none';
+        document.getElementById('englishContent').style.display = 'block';
+        document.querySelector('.language-toggle').textContent = 'Switch to Hinglish Version';
+        showEngPage(currentEngPage);
+        isEnglish = true;
+      }
+    }
+
+    function toggleSummary() {
+      const box = document.getElementById("summaryBox");
+      if (box.style.display === "none" || box.style.display === "") {
+        box.style.display = "block";
+      } else {
+        box.style.display = "none";
+      }
+    }
+
+    showEngPage(1);
+  </script>
+</body>
+</html>
