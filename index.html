@@ -167,6 +167,7 @@
 
     .language-toggle {
       margin-top: 20px;
+      margin-bottom: 20px;
       padding: 14px 30px;
       font-size: 1.4rem;
       background: linear-gradient(90deg, #ff00ff, #00ffff);
@@ -181,47 +182,9 @@
       transform: scale(1.1);
     }
 
-    .summary-toggle {
-      margin-top: 20px;
-      padding: 14px 30px;
-      font-size: 1.4rem;
-      background: linear-gradient(90deg, #00f2fe, #4facfe);
-      border: none;
-      border-radius: 12px;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 20px #00f2fe;
-      transition: 0.4s;
-    }
-    .summary-toggle:hover {
-      background: linear-gradient(90deg, #fc466b, #3f5efb);
-      transform: scale(1.1);
-    }
-
-    .summary-box {
-      width: 90%;
-      max-width: 900px;
-      padding: 30px;
-      margin-top: 30px;
-      background: linear-gradient(135deg, #1e1e1e, #292929);
-      border: 3px solid;
-      border-image: linear-gradient(45deg, #00ffcc, #ff00ff, #00ffff) 1;
-      border-radius: 15px;
-      color: #fff;
-      font-size: 1.3rem;
-      line-height: 1.8;
-      box-shadow: 0 0 30px #00ffcc;
-      display: none;
-      animation: doorOpen 0.6s ease forwards;
-    }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes doorOpen {
-      0% { transform: scaleX(0); opacity: 0; }
-      100% { transform: scaleX(1); opacity: 1; }
     }
   </style>
 </head>
@@ -243,11 +206,10 @@
   <!-- MAIN CONTENT -->
   <div id="mainContent" class="main-content">
 
-    <!-- Buttons at Top -->
+    <!-- Language Toggle Button -->
     <button class="language-toggle" onclick="toggleLanguage()">Switch to Hinglish Version</button>
-    <button class="summary-toggle" onclick="toggleSummary()">Summary & Next Step</button>
 
-    <!-- English Version (Default First) -->
+    <!-- English Version (Default) -->
     <div class="request-box" id="englishContent">
       <div id="e_page1" class="page active">
         <div class="line"><span style="color:#ff0066;">Dear Buddy,</span></div>
@@ -332,7 +294,7 @@
       </div>
     </div>
 
-    <!-- Hinglish Version (Hidden initially) -->
+    <!-- Hinglish Version -->
     <div class="request-box" id="hinglishContent" style="display:none;">
       <div id="h_page1" class="page active">
         <div class="line"><span style="color:#ff0066;">Dear Buddy,</span></div>
@@ -341,16 +303,16 @@
         <div class="line">with <span style="color:#ff66ff;">friends 😁</span> or <span style="color:#00ffff;">alone 😎😇😏🧐</span>,</div>
         <div class="line"><span style="color:#ff3300;">please don’t complain.</span> 😌</div>
         <div class="line">start</div>
-        <div class="line">I'm much more <span style="color:#ffff33;">mature</span> and much <span style="color:#ccff33;">smarter</span> now.</div>
-        <div class="line">I don’t really need anyone’s help — I usually handle everything on my own.</div>
-        <div class="line">But yes, I often use <span style="color:#00ff99;">AI</span> to know what to do, how to do it, and why to do it.</div>
-        <div class="line">Now that I’m able to do things myself, I wonder —</div>
-        <div class="line">why do I still come to you with questions?</div>
-        <div class="line"><span style="color:#ff99cc;">Maybe because I trust you.</span></div>
-        <div class="line">That’s why I just wanted to say <span style="color:#3399ff;">thank you</span>.</div>
-        <div class="line">I also wanted to ask a few questions about <span style="color:#ff3366;">“illegal” and “legal”</span> things.</div>
-        <div class="line">Before that, I want to make one thing clear —</div>
-        <div class="line">I <span style="color:#cc33ff;">never lie</span>. Please understand that.</div>
+        <div class="line"><span style="color:#ffff33;">“I’m much more mature and much smarter.”</span></div>
+        <div class="line"><span style="color:#ff66cc;">(Maturity to ise level tak hai ki muje aap se help lene me bekar lag raha</span></div>
+        <div class="line"><span style="color:#ff66cc;">i thik mere papa study ke leye beje hai aur mai yaha pe kise girl se help mag raha hu )</span></div>
+        <div class="line"><span style="color:#ff99cc;">मुझे किसी की मदद नहीं चाहिए — मैं सब कुछ खुद ही कर लेता हूँ।</span></div>
+        <div class="line">But I know I always use <span style="color:#00ff99;">AI</span> to understand what to do, how to do, and why to do.</div>
+        <div class="line"><span style="color:#ccff33;">अब जब हम खुद ही सब कर लेते हैं,</span></div>
+        <div class="line"><span style="color:#ccff33;">तो फिर आपको सवाल पूछने की ज़रूरत क्यों है?</span></div>
+        <div class="line"><span style="color:#3399ff;">असल में, मैंने तो बस आपको thank you बोलना था</span></div>
+        <div class="line"><span style="color:#ff3366;">और कुछ illegal or legal सवाल पूछने थे।</span></div>
+        <div class="line"><span style="color:#ff99ff;">सबसे पहले — मैं फिर से कह रहा हूँ, मैं झूठ नहीं बोलता, so please understand this.</span></div>
 
         <div class="nav-buttons">
           <button class="nav-btn" onclick="prevPage()" disabled>Back</button>
@@ -359,22 +321,18 @@
       </div>
 
       <div id="h_page2" class="page">
-        <div class="line">I’ve already told you something <span style="color:#ff99ff;">personal</span> before —</div>
-        <div class="line">whenever I share my <span style="color:#00ccff;">ideas</span> with a friend,</div>
-        <div class="line">their luck seems to go <span style="color:#ff0000;">down</span> from that day.</div>
-        <div class="line">But ever since I started talking to you,</div>
-        <div class="line">everything in my life has only <span style="color:#66ff33;">gotten better</span>.</div>
-        <div class="line">I first saw you on <span style="color:#ffcc99;">2nd August 2025</span>,</div>
-        <div class="line">and from that day onwards,</div>
-        <div class="line">I began studying in the library until <span style="color:#33ffcc;">7 PM</span> every day —</div>
-        <div class="line">because at that time, I felt a <span style="color:#ffff99;">strong motivation</span> from you.</div>
-        <div class="line">If you had refused to help me back then,</div>
-        <div class="line">I would never have asked you again —</div>
-        <div class="line">that’s just how I am.</div>
-        <div class="line">I thought you would say no,</div>
-        <div class="line">but you <span style="color:#00ff00;">didn’t</span>.</div>
-        <div class="line">(Sorry if my thoughts jump from one topic to another —</div>
-        <div class="line">my mind is always full of ideas.)</div>
+        <div class="line"><span style="color:#00ccff;">मैंने आपको personal section में भी बताया था कि</span></div>
+        <div class="line"><span style="color:#ff0000;">जब भी मैं अपना कोई idea किसी दोस्त से share करता हूँ,</span></div>
+        <div class="line"><span style="color:#ff0000;">उस दिन से उस काम का downfall शुरू हो जाता है।</span></div>
+        <div class="line"><span style="color:#55dc07;">लेकिन जब से आपसे बात की है, तब से सिर्फ फायदा ही फायदा हो रहा है।</span></div>
+        <div class="line"><span style="color:#33ffcc;">मैंने आपको पहली बार 2 August 2025 को देखा था,</span></div>
+        <div class="line"><span style="color:#ffff99;">और उसी दिन से मैं रोज़ library में 7 बजे तक study करना शुरू कर दिया।</span></div>
+        <div class="line"><span style="color:#ff9933;">(क्योंकि उस समय मुझे आपसे काम था।)</span></div>
+        <div class="line"><span style="color:#99ff33;">Suppose अगर आप 18 October को मना कर देते,</span></div>
+        <div class="line"><span style="color:#99ff33;">तो मैं कभी दोबारा आपसे या किसी और से help नहीं लेता —</span></div>
+        <div class="line"><span style="color:#00ff00;">मुझे लगा आप मना कर देंगे, लेकिन आपने “हाँ” कहा।</span></div>
+        <div class="line"><span style="color:#ff9933;">(मेरे mind में हर वक्त कुछ न कुछ चलता रहता है,</span></div>
+        <div class="line"><span style="color:#ff9933;">तो अगर topic change हो जाए तो sorry.)</span></div>
 
         <div class="nav-buttons">
           <button class="nav-btn" onclick="prevPage()">Back</button>
@@ -383,19 +341,19 @@
       </div>
 
       <div id="h_page3" class="page">
-        <div class="line">Just like my sister is the <span style="color:#ff33ff;">Lakshmi</span> of our house,</div>
-        <div class="line">you are the same for your home.</div>
-        <div class="line">(Okay, I’ll stop being <span style="color:#ffcc66;">too emotional</span> here. 😅)</div>
-        <div class="line">Now, here’s what I actually want to say —</div>
-        <div class="line">In <span style="color:#ff3366;">2026</span>, I’m going to work hard on my goals.</div>
-        <div class="line">Even if I <span style="color:#ccff00;">fail</span>, it’s okay.</div>
-        <div class="line">Since the day I met you,</div>
-        <div class="line">things have only gone <span style="color:#66ffff;">right</span> in my life —</div>
-        <div class="line">and I wanted you to <span style="color:#ff9900;">know</span> that.</div>
-        <div class="line">I <span style="color:#9900ff;">trust</span> you,</div>
-        <div class="line">so please <span style="color:#ff0099;">don’t share this</span> with anyone.</div>
-        <div class="line">This will be my <span style="color:#00ff33;">last personal message</span> for now —</div>
-        <div class="line"><span style="color:#ffff00;">don’t worry</span>, I won’t disturb you in 2026.</div>
+        <div class="line"><span style="color:#ff33ff;">जैसे मेरी बहन मेरे घर की लक्ष्मी है,</span></div>
+        <div class="line"><span style="color:#ff33ff;">वैसे ही आप अपने घर की लक्ष्मी हों।</span></div>
+        <div class="line"><span style="color:#33ccff;">(Okay, शायद यह थोड़ा ज़्यादा हो गया 😅)</span></div>
+        <div class="line"><span style="color:#00ffff;">अब main बात —</span></div>
+        <div class="line"><span style="color:#ff9900;">मुझे आपसे जो काम है, वो ये है:</span></div>
+        <div class="line"><span style="color:#ccff00;">मैं बस आपको बताना चाहता हूँ कि मैं 2026 में ये-ये काम करने वाला हूँ।</span></div>
+        <div class="line"><span style="color:#ff3366;">अगर fail भी हो गया, तो कोई बात नहीं।</span></div>
+        <div class="line"><span style="color:#66ffff;">लेकिन जब से आपसे मिला हूँ, सब कुछ best ही हो रहा है।</span></div>
+        <div class="line"><span style="color:#66ffff;">बस ये बात share करनी थी।</span></div>
+        <div class="line"><span style="color:#9900ff;">और अगर मैं आप पर trust कर रहा हूँ,</span></div>
+        <div class="line"><span style="color:#9900ff;">तो please ये बातें किसी दोस्त को मत बताना।</span></div>
+        <div class="line"><span style="color:#ff0099;">This is my last full-level library message.</span></div>
+        <div class="line"><span style="color:#00ff33;">Don’t worry — I’ll not disturb you in 2026 again.</span></div>
 
         <div class="nav-buttons">
           <button class="nav-btn" onclick="prevPage()">Back</button>
@@ -404,10 +362,14 @@
       </div>
 
       <div id="h_page4" class="page">
-        <div class="line">I just have one question:</div>
-        <div class="line"><span style="color:#ff00ff;">Why is it that ever since I met you,</span></div>
-        <div class="line"><span style="color:#ff0000; font-size:1.4rem;">everything in my life has started improving —</span></div>
-        <div class="line"><span style="color:#ff0000; font-size:1.4rem;">especially when I face problems or tough situations ?</span></div>
+        <div class="line"><span style="color:#ff00ff;">देखो यार,</span></div>
+        <div class="line"><span style="color:#ff00ff;">अभी मेरे mind में बहुत सारे thoughts चल रहे हैं —</span></div>
+        <div class="line"><span style="color:#ff00ff;">कि ये भी पूछ लूं, वो भी बता दूं…</span></div>
+        <div class="line"><span style="color:#ff00ff;">लेकिन नहीं बता सकता।</span></div>
+        <div class="line"><span style="color:#00ffff;">अब काम की बात —</span></div>
+        <div class="line"><span style="color:#3399ff;">I want your suggestion:</span></div>
+        <div class="line"><span style="color:#ff00ff;">Why is it that since the day I met you,</span></div>
+        <div class="line"><span style="color:#ff0000; font-size:1.4rem;">everything in my life has started going better?</span></div>
         <div class="line"><span style="color:#26ff00; font-size:1.3rem;">Thank you :-</span></div>
 
         <div class="nav-buttons">
@@ -417,19 +379,6 @@
       </div>
     </div>
 
-    <div id="summaryBox" class="summary-box">
-      <div class="line"><span style="color:#ff0066;">Dear Buddy,</span></div>
-      <div class="line"><span style="color:#00ffcc;">Thank you so much</span> — ever since I met you, everything in my life has started improving dramatically, especially in tough situations.</div>
-      <div class="line">My studies, focus, and luck — all going great because of the motivation from you.</div>
-      <div class="line">I trust you completely and shared my 2026 plans.</div>
-      <div class="line">This is my last personal message — won’t disturb in 2026.</div>
-      <div class="line">Question: <span style="color:#ff0000; font-size:1.4rem;">Why has life improved so much since meeting you?</span></div>
-      <div class="line" style="margin-top: 30px; font-size: 1.5rem; text-align: center;">
-        <a href="https://7577e.github.io/workkk/" target="_blank" style="color: #00ffcc; text-decoration: underline;">
-          Click here for the next step / my work
-        </a>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -523,15 +472,6 @@
         document.querySelector('.language-toggle').textContent = 'Switch to Hinglish Version';
         showEngPage(currentEngPage);
         isEnglish = true;
-      }
-    }
-
-    function toggleSummary() {
-      const box = document.getElementById("summaryBox");
-      if (box.style.display === "none" || box.style.display === "") {
-        box.style.display = "block";
-      } else {
-        box.style.display = "none";
       }
     }
 
